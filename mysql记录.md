@@ -1,4 +1,4 @@
-## 事务的ACID属性
+
 
 - 原子性
   - 对其数据的修改，要么全执行，要么全不执行
@@ -72,4 +72,124 @@
 
 5. `show profiles`显示当前执行的语句和时间
 
-6. 
+## 函数和语句
+
+##### extract() 
+
+```mysql
+SELECT EXTRACT(YEAR_MONTH FROM NOW());
+202006
+```
+
+##### dayname()
+
+```mysql
+SELECT DAYNAME(NOW());
+Monday
+```
+
+##### if()
+
+```mysql
+SELECT IF(RAND()>0.5,TRUE,FALSE)
+0
+```
+
+##### date_add()&&interval
+
+```mysql
+SELECT DATE_ADD(NOW(),INTERVAL 1 MONTH);
+2020-07-15 17:56:18
+```
+
+##### is_ipv4()
+
+```mysql
+SELECT is_ipv4('10.0.5.9');
+1
+```
+
+##### json_array
+
+```mysql
+SELECT JSON_ARRAY('id',1,'name','king');
+["id", 1, "name", "king"]
+```
+
+##### json_object
+
+```mysql
+SELECT JSON_OBJECT('id',1,'name','king');
+{"id": 1, "name": "king"}
+```
+
+##### json_array_append
+
+```mysql
+["id", 1, "name", "king"]
+SELECT JSON_ARRAY_APPEND(@j,'$[0]', 'age2');
+[["id", "age2"], 1, "name", "king"]
+```
+
+##### json_array_insert
+
+```mysql
+SELECT JSON_ARRAY_INSERT(@j, '$[1]', "ccc");
+["id", "ccc", 1, "name", "king"]
+```
+
+##### json_contains 查找对应字符
+
+```mysql
+set @j='{"id": 1, "name": "king"}';
+SELECT JSON_CONTAINS(@j, '1','$.id'); -- 必须是字符串1
+1
+```
+
+##### json_contains_path 判断对应项存不存在
+
+```mysql
+set @j='{"id": 1, "name": "king"}';
+SELECT JSON_CONTAINS_PATH(@j, 'one', '$.id');
+1
+SELECT JSON_CONTAINS_PATH(@j, 'all', '$.id','$.name1');
+0
+```
+
+##### Json_depth 查找json最深深度
+
+```mysql
+SELECT JSON_DEPTH(@j);
+2
+```
+
+##### json_extract 指定索引查找
+
+```mysql
+SELECT JSON_EXTRACT(@j, '$.id','$.name');
+[1, "king"]
+```
+
+##### json_keys
+
+```mysql
+SELECT JSON_KEYS(@j);
+["id", "name"]
+```
+
+##### json_length
+
+```mysql
+SELECT JSON_LENGTH(@j);
+2
+```
+
+##### json_object
+
+```mysql
+SELECT JSON_OBJECT('a',1,'b',2);
+{"a": 1, "b": 2}
+```
+
+
+
