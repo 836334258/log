@@ -191,5 +191,97 @@ SELECT JSON_OBJECT('a',1,'b',2);
 {"a": 1, "b": 2}
 ```
 
+##### JOSN_OBERLAPS(INTRODUCED 8.0.17) 只要一个键值对匹配，返回1
 
+```mysql
+set @j=JSON_OBJECT("a",1,"b",2);
+set @k=JSON_OBJECT("a",1,"c",2);
+
+SELECT JSON_OVERLAPS(@j,@k);
+1
+```
+
+##### json_pretty
+
+```mysql
+mysql root@localhost:(none)> select json_pretty(@j)
++------------------+
+| json_pretty(@j)  |
++------------------+
+| {                |
+|   "id": 1,       |
+|   "name": "king" |
+| }                |
++------------------+
+```
+
+##### json_remove
+
+```mysql
+SELECT JSON_REMOVE(@j,'$.a');
+{"b": 2}
+```
+
+##### json_replace 只能替换@j里面已有的值
+
+```mysql
+SELECT JSON_REPLACE(@j, '$.a', 10,'$.b',20)
+{"a": 10, "b": 20}
+```
+
+##### json_set 可以随意设置值
+
+```mysql
+SELECT JSON_SET(@j, '$.a', 10,'$.b',20,'$.c',30);
+{"a": 10, "b": 20, "c": 30}
+```
+
+##### json_valid 检验json格式
+
+```mysql
+SELECT JSON_VALID('{"name"1}');
+0
+```
+
+##### last_day()返回这个月的最后一天
+
+```mysql
+SELECT LAST_DAY(NOW());
+2020-06-30
+```
+
+##### last_insert_id()
+
+```mysql
+SELECT LAST_INSERT_ID();
+2
+```
+
+##### left()
+
+```mysql
+SELECT LEFT("abcd",2);
+ab
+```
+
+##### lpad()
+
+```mysql
+SELECT LPAD("hi",4,"??");
+??hi
+```
+
+##### member of  introduced 8.0.17)
+
+```mysql
+SELECT 7 member of ('[7,1,3]');
+1
+```
+
+##### random_bytes
+
+```mysql
+SELECT random_bytes(8);
+m+õ·»L
+```
 
