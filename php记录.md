@@ -63,4 +63,5 @@ YWJj
 -  pathinfo  pathinfo('https://www.php.net/manual/zh/book.strings.php',PATHINFO_DIRNAME);
 -  print 是语言结构，只支持一个参数，总是返回1
 -  similar_text 计算字符串相似度(统计有几个字符串相同，从左往右)
+-  error_reporting(-1)报告所有错误
 
