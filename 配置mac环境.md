@@ -1,0 +1,1 @@
+- `export PATH="$(brew --prefix php)/bin:$PATH"` 配置php

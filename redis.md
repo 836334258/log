@@ -4,6 +4,31 @@
 - AOF(append only file)文件追加方式，记录所有操作命令，并以文本形式追加到文件中
 - 混合持久化方式，Redis4.0新增，混合持久化方式结合了RDB和AOF的优点，在写入的时候，先把当前数据以RDB的形式写入文件的开头，再将后续的操作命令以AOF的格式写入文件，这样既能保证Redis重启的速度，又能降低数据丢失的风险。
 
+#### 配置主从同步
+
+[网址]: https://www.jianshu.com/p/ff2df53fb954
+
+
+
+- Redis的主从模式采用的是RDB文件同步的方式，因为Redis的服务端，数据量有可能非常的大，所以从性能考虑，没有采用AOF快照来同步。
+
+- 大概过程
+
+  1. 从机上线，主动连接主机，发送`SYNC`命令
+  2. 主机接到命令后，执行`BGSAVE` 命令，生成RDB文件
+  3. 主机向从机发送RDB文件，开始同步数据
+  4. 同步之后，主机将最近的更新，采用命令的形式同步到从机
+
+- 配置
+
+  - `masterauth 123456` 如果主服务器有密码，需要配置
+
+  - `replica-read-only yes` 从服务器是否只读，默认是
+
+  - ` replicaof host.docker.internal 6378` docker从服务器配置 主机ip 主机port 
+
+    [文档]: https://docs.docker.com/docker-for-mac/networking/	"f文档"
+
 #### 配置文件
 
 - `aof-use-rdb-preamble yes` 开启混合持久化
@@ -16,4 +41,16 @@
 - `save 60 1000` 快照保存，默认保存名为dump.rdb ，当满足`1000秒内至少有60个键被改动时` 自动保存一次数据
 - `dbfilename dump.rdb` 快照默认保存名
 - `appendonly no` 开启aof，当redis执行改变数据集的命令时，这个命令会被追加到aof文件的末尾
+- `appendfilename "appendonly.aof"` 
+- `appendfsync everysec` 有no，always，everysec三个选项
+- `requirepass 123456` 连接redis需要的密码
 
+#### 事务
+
+启动事务`mulit` 执行事务 `exec`  观察一个key，如果在事务执行过程中这个key发生改变，则事务全部回滚 `watch`
+
+
+
+#### 命令
+
+`discard` 取消事务

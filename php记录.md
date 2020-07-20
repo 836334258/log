@@ -24,6 +24,18 @@ YWJj
 
 ```
 
+3. Php7.3json处理
+
+   ```php
+   $json = '{"a":1,"b":2,"c":3,"d",4,"e":5}';
+   
+   try {
+       var_dump(json_decode($json,true,512,JSON_THROW_ON_ERROR));
+   }catch (JsonException $e){
+       echo $e->getCode();
+   }
+   ```
+
 ### 概念
 
 - Trait
@@ -50,7 +62,7 @@ YWJj
   });
   ```
 
-- 
+- 关于stdclass，`$arr2=(object)$arr;` 这种stdclass是基类，正常的class不是
 
 ### 函数
 
