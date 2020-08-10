@@ -36,6 +36,61 @@ YWJj
    }
    ```
 
+4. curl 并发请求
+
+   ```php
+   function curl(string $url, bool $isPost, int $threads = 1, array $postData = [])
+   {
+       $mh = curl_multi_init();
+       $ch_array = array();
+   
+       for ($i = 0; $i < $threads; $i++) {
+           $ch_array[$i] = curl_init();
+   
+           curl_setopt($ch_array[$i], CURLOPT_URL, $url);
+           curl_setopt($ch_array[$i], CURLOPT_RETURNTRANSFER, 1);
+           curl_setopt($ch_array[$i], CURLOPT_POST, $isPost);
+           curl_setopt($ch_array[$i], CURLOPT_SSL_VERIFYHOST, false);
+           curl_setopt($ch_array[$i], CURLOPT_SSL_VERIFYPEER, false);
+           curl_setopt($ch_array[$i], CURLOPT_HTTPHEADER, [
+               'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36'
+           ]);
+           if ($isPost) {
+               curl_setopt($ch_array[$i], CURLOPT_POSTFIELDS, $postData);
+           }
+   
+           curl_multi_add_handle($mh, $ch_array[$i]);
+       }
+   
+       $running = null;
+       do {
+           $mrc = curl_multi_exec($mh, $running);
+   
+       } while ($mrc == CURLM_CALL_MULTI_PERFORM);
+   
+   
+       while ($running && $mrc == CURLM_OK) {
+           usleep(5000);
+           if (curl_multi_select($mh) != -1) {
+               do {
+                   $mrc = curl_multi_exec($mh, $running);
+               } while ($mrc == CURLM_CALL_MULTI_PERFORM);
+           }
+       }
+   
+       for ($i = 0; $i < $threads; $i++) {
+           $data = curl_multi_getcontent($ch_array[$i]);
+           var_dump($data);
+           curl_multi_remove_handle($mh, $ch_array[$i]);
+       }
+   
+   
+       curl_multi_close($mh);
+   }
+   ```
+
+
+
 ### 概念
 
 - Trait

@@ -22,6 +22,18 @@
 8. 隐式类型转换会导致索引失效
 9. 少用`or`
 
+## 常用操作
+
+- 更改密码 `mysqladmin -uroot -p原密码 password 123456`
+
+- 配置远程登录
+
+  ``````
+  mysql> create user 'root'@'%' identified by '你自己的mysql密码';
+  mysql> grant all privileges on *.* to 'root'@'%';
+  mysql> flush privileges;
+  ``````
+
 ## 慢查询
 
 1. 查看是否开启慢查询 `show variables like 'slow_query%'`
@@ -96,9 +108,22 @@
 ## 注意点
 
 - mysql的 varchar是以字符为单位的
+
 - 保存ip地址时可以使用int类型保存，mysql函数 INET_ATON('127.0.0.1')，INET_NTOA('2130706433')
+
 - `SELECT * FROM tests ORDER BY CONVERT(title USING gbk);` 按中文排序
+
 - 尽量不要使用null类型，因为会mysql会增加一层判断
+
+- 查询or时可以
+
+  ```mysql
+  select id from t where num=10
+  
+  union all
+  
+  select id from t where num=20
+  ```
 
 ## 函数和语句
 
@@ -311,5 +336,42 @@ SELECT 7 member of ('[7,1,3]');
 ```mysql
 SELECT random_bytes(8);
 m+õ·»L
+```
+
+
+
+#### Mysql语句
+
+```mysql
+-- union 合并结果集合 查询所有,相同的数据不显示出来，但是两张表的结构必须相同，查询的字段也要相同
+SELECT * FROM dx_users WHERE id<10
+UNION
+SELECT * FROM dx_users WHERE id<11
+;
+```
+
+```mysql
+-- union all 查询所有,相同的数据也会显示出来，但是两张表的结构必须相同，查询的字段也要相同
+SELECT * FROM dx_users WHERE id<10
+UNION all
+SELECT * FROM dx_users WHERE id<11
+;
+```
+
+​	
+
+```mysql
+-- 连接查询，会产生笛卡尔集
+SELECT * FROM dx_users,dx_staffs
+```
+
+```mysql
+-- 选择连接查询
+SELECT * FROM dx_users du,dx_staffs ds WHERE du.id=ds.user_id ORDER BY du.id
+```
+
+```mysql
+-- 内连接查询 内连接与多表联查约束主外键相同，只是写法改变
+SELECT * FROM dx_users INNER JOIN dx_staffs WHERE dx_users.id=dx_staffs.user_id ORDER BY dx_users.id
 ```
 
