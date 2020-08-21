@@ -132,3 +132,6 @@ YWJj
 -  similar_text 计算字符串相似度(统计有几个字符串相同，从左往右)
 -  error_reporting(-1)报告所有错误
 
+## Tips
+
+1. '__invoke' 把对象当做方法调用是用到这个函数

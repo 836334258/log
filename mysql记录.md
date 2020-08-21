@@ -100,6 +100,17 @@
   - 温备份（备份时，数据库读操作可以执行，但是不能执行写操作）
   - 冷备份（备份时，数据库不能执行读写操作）
 
+
+
+## mysqldump
+
+1. `mysqldump --databases db1 > dump.sql` 备份指定数据库
+2. `mysqldump --no-data test > dump-defs.sql` 备份指定数据库 没有数据
+3. 在my.cnf 文件加`[mysqldump]
+   user=root
+   password=123456` 可以无密码使用mysqldump
+4. 
+
 ## 索引
 
 - 聚集索引（主键索引）就是按照每张表的主键构造一颗B+树，同时叶子节点存放的即为整张表的记录数据。聚集索引的叶子节点成为数据页。
@@ -374,4 +385,6 @@ SELECT * FROM dx_users du,dx_staffs ds WHERE du.id=ds.user_id ORDER BY du.id
 -- 内连接查询 内连接与多表联查约束主外键相同，只是写法改变
 SELECT * FROM dx_users INNER JOIN dx_staffs WHERE dx_users.id=dx_staffs.user_id ORDER BY dx_users.id
 ```
+
+
 
